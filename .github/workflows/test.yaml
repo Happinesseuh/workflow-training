@@ -1,0 +1,42 @@
+name: Tests
+on:
+  push:
+    branches:
+      - master
+      - dev
+jobs:
+  hello-world:
+    runs-on: ubuntu-20.04
+    steps:
+    - name: Say hello world
+      run: echo 'Welcome to the Github Actions workshop !'
+
+  unit-test:
+    runs-on: ubuntu-20.04
+    container:
+      image: epitechcontent/epitest-docker
+    steps:
+    - uses: actions/checkout@v2
+    - name : run test
+      run: echo make tests_run > coverage_outputs.txt
+    - uses: actions/upload-artifact@v2
+      with:
+        name: coverage_outputs
+        path: coverage_outputs.txt
+
+  function-tests_outputs:
+    runs-on: ubuntu-20.04
+    container:
+      image: epitechcontent/epitest-docker
+    steps:
+    - uses: actions/checkout@v2
+    - name : run do op
+      run: make
+    - name : run test
+      run: make tests_run
+    - name : run script test
+      run: ./functional-test.sh > function_tests.txt
+    - uses: actions/upload-artifact@v2
+      with:
+        name: function_tests
+        path: function_tests.txt
